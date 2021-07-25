@@ -5,7 +5,7 @@ const pptr = require("puppeteer");
 (async () => {
 	const browser = await pptr.launch({ headless: false });
 	const page = await browser.newPage();
-	await page.goto(url, { waitUntil: "load" });
+	await page.goto(url, { waitUntil: "load", timeout: 0 });
 
 	try {
 		await page.waitForXPath('//*[@id="px-captcha"]/div/iframe[1]', {
@@ -67,17 +67,17 @@ const pptr = require("puppeteer");
 			return Promise.resolve(await link.jsonValue());
 		})
 	);
+	console.log(links);
+	// const page1 = await browser.newPage();
+	// await page1.goto(links[0], { waitUntil: "load" });
 
-	const page1 = await browser.newPage();
-	await page1.goto(links[0], { waitUntil: "load" });
-
-	const quotes = await page1.$x(
-		'//*[@id="perseus-app"]/div/div[3]/div/div[7]/ul/li/a'
-	);
-	const eachQuote = await Promise.all(
-		page1.evaluate(async (i) => Promise.resolve(await i.textContent), quotes[0])
-	);
-	console.log(eachQuote);
+	// const quotes = await page1.$x(
+	// 	'//*[@id="perseus-app"]/div/div[3]/div/div[7]/ul/li/a'
+	// );
+	// const eachQuote = await Promise.all(
+	// 	page1.evaluate(async (i) => Promise.resolve(await i.textContent), quotes[0])
+	// );
+	// console.log(eachQuote);
 
 	return Promise.resolve();
 })().catch((err) => console.log(err));
